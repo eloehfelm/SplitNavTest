@@ -11,11 +11,21 @@ import SwiftUI
 struct SplitNavTestApp: App {
 
     @State private var appModel = AppModel()
+    
+    @StateObject private var storeDataReader = StoreDataReader()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(storeDataReader: storeDataReader)
                 .environment(appModel)
+        }
+        
+        WindowGroup(id: "itemDetail", for: Item.self) { item in
+            if let item = item.wrappedValue {
+                ItemDetailView(item: item)
+            } else {
+                Text("no item selected")
+            }
         }
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
